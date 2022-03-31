@@ -95,7 +95,7 @@ public class IdentityComponent implements AutoSyncedComponent, ServerTickingComp
         }
 
         // If the player is riding a Ravager and changes into an Identity that cannot ride Ravagers, kick them off.
-        if (player.getVehicle() instanceof RavagerEntity && (identity == null || !EntityTags.RAVAGER_RIDING.contains(identity.getType()))) {
+        if (player.getVehicle() instanceof RavagerEntity && (identity == null || !identity.getType().isIn(EntityTags.RAVAGER_RIDING))) {
             player.stopRiding();
         }
 
@@ -151,7 +151,7 @@ public class IdentityComponent implements AutoSyncedComponent, ServerTickingComp
                 EntityType<?> type = this.identity.getType();
 
                 // check if the player's current identity burns in sunlight
-                if (EntityTags.BURNS_IN_DAYLIGHT.contains(type)) {
+                if (type.isIn(EntityTags.BURNS_IN_DAYLIGHT)) {
                     boolean bl = this.isInDaylight();
                     if (bl) {
 
@@ -212,8 +212,8 @@ public class IdentityComponent implements AutoSyncedComponent, ServerTickingComp
                 EntityType<?> type = this.identity.getType();
 
                 // damage player if they are an identity that gets hurt by high temps (eg. snow golem in nether)
-                if (EntityTags.HURT_BY_HIGH_TEMPERATURE.contains(type)) {
-                    if (player.world.getBiome(new BlockPos(player.getX(), 0, player.getZ())).computeTemperature(new BlockPos(player.getX(), player.getY(), player.getZ())) > 1.0F) {
+                if (type.isIn(EntityTags.HURT_BY_HIGH_TEMPERATURE)) {
+                    if (player.world.getBiome(new BlockPos(player.getX(), 0, player.getZ())).value().isHot(new BlockPos(player.getX(), player.getY(), player.getZ()))) {
                         player.damage(DamageSource.ON_FIRE, 1.0F);
                     }
                 }

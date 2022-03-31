@@ -41,6 +41,7 @@
   "accessWidener": "identity.accesswidener",
   "depends": {
     "fabricloader": ">=0.8.7+build.201",
-    "fabric": "*"
+    "fabric": "*",
+    "minecraft": "^1.18.2"
   }
 }

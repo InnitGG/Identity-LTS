@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -22,7 +22,7 @@ repositories {
         url = 'https://ladysnake.jfrog.io/artifactory/mods'
         content {
             includeGroup 'io.github.ladysnake'
-            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+            includeGroupByRegex 'dev\\.onyxstudios.*'
         }
     }
 }
@@ -40,10 +40,10 @@ dependencies {
     }
 
     // Cardinal Components: https://github.com/OnyxStudios/Cardinal-Components-API
-    modImplementation "io.github.onyxstudios:Cardinal-Components-API:${project.cardinal_version}"
-    include "io.github.onyxstudios:Cardinal-Components-API:${project.cardinal_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${project.cardinal_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${project.cardinal_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_version}"
 
     // config
     modImplementation 'com.github.Draylar.omega-config:omega-config-base:1.0.4-beta'

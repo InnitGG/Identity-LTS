@@ -8,7 +8,6 @@
     "CreeperEntityMixin",
     "EntityAccessor",
     "EntityMixin",
-    "EntityTypeTagsAccessor",
     "FoxEntityMixin",
     "HoglinBrainMixin",
     "IronGolemEntityAccessor",
