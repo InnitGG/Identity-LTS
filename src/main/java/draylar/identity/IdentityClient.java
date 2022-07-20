@@ -44,27 +44,27 @@ public class IdentityClient implements ClientModInitializer {
 
         // add screen opening key-bind
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
-            assert client.player != null;
-
-            if(MENU_KEY.wasPressed()) {
-                if(Identity.CONFIG.enableClientSwapMenu || client.player.hasPermissionLevel(3)) {
-                    MinecraftClient.getInstance().setScreen(new IdentityScreen());
+            if (client.player != null) {
+                if (MENU_KEY.wasPressed()) {
+                    if (Identity.CONFIG.enableClientSwapMenu || client.player.hasPermissionLevel(3)) {
+                        MinecraftClient.getInstance().setScreen(new IdentityScreen());
+                    }
                 }
             }
         });
 
         // when the use-ability key is pressed, trigger ability
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
-            assert client.player != null;
-
-            if(ABILITY_KEY.wasPressed()) {
-                // TODO: maybe the check should be on the server to allow for ability extension mods?
-                // Only send the ability packet if the identity equipped by the player has one
-                LivingEntity identity = Components.CURRENT_IDENTITY.get(client.player).getIdentity();
-
-                if(identity != null) {
-                    if(AbilityRegistry.has(identity.getType())) {
-                        ClientNetworking.sendAbilityRequest();
+            if (client.player != null) {
+                if (ABILITY_KEY.wasPressed()) {
+                    // TODO: maybe the check should be on the server to allow for ability extension mods?
+                    // Only send the ability packet if the identity equipped by the player has one
+                    LivingEntity identity = Components.CURRENT_IDENTITY.get(client.player).getIdentity();
+        
+                    if (identity != null) {
+                        if (AbilityRegistry.has(identity.getType())) {
+                            ClientNetworking.sendAbilityRequest();
+                        }
                     }
                 }
             }
