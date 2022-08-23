@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
 import net.minecraft.entity.LivingEntity;
@@ -36,7 +37,7 @@ public class PiglinBrainMixin {
 
                 // Player has an Identity but is not a piglin, check config for what to do
                 else {
-                    if (Identity.CONFIG.hostilesIgnoreHostileIdentityPlayer && identity instanceof Monster) {
+                    if (IdentityConfig.hostilesIgnoreHostileIdentityPlayer && identity instanceof Monster) {
 
                         // Check hostility for aggro on non-piglin hostiles
                         if(!hasHostility) {

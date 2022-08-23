@@ -19,8 +19,7 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
 import java.awt.*;
@@ -39,7 +38,7 @@ public class IdentityScreen extends Screen {
     private String lastSearchContents = "";
 
     public IdentityScreen() {
-        super(new LiteralText(""));
+        super(Text.empty());
         super.init(MinecraftClient.getInstance(), MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight());
 
         populateRenderEntities();
@@ -113,7 +112,7 @@ public class IdentityScreen extends Screen {
 
         // Render background hint when no identities have been collected
         if(unlocked.isEmpty()) {
-            TranslatableText message = new TranslatableText("identity.menu_hint");
+            Text message = Text.translatable("identity.menu_hint");
             float xPosition = (getWindow().getWidth() / 2f) - (MinecraftClient.getInstance().textRenderer.getWidth(message) / 2f);
             float yPosition = (getWindow().getHeight() / 2f);
             MinecraftClient.getInstance().textRenderer.draw(matrices, message, xPosition, yPosition, 0xFFFFFF);

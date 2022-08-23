@@ -44,10 +44,6 @@ dependencies {
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${project.cardinal_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_version}"
-
-    // config
-    modImplementation 'com.github.Draylar.omega-config:omega-config-base:1.0.4-beta'
-    include 'com.github.Draylar.omega-config:omega-config-base:1.0.4-beta:min'
 }
 
 processResources {
@@ -76,19 +72,30 @@ jar {
     }
 }
 
-// configure the maven publication
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifactId = archives_base_name
+            groupId = maven_group
+            version = mod_version
+
             from components.java
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            name = "vini2003"
+            url = "https://maven.vini2003.dev/releases"
+
+            credentials {
+                username = System.getenv("MVN_USERNAME")
+                password = System.getenv("MVN_TOKEN")
+            }
+
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
     }
 }

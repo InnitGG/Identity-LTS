@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
 import net.minecraft.entity.Entity;
@@ -57,7 +58,7 @@ public abstract class FoxEntityMixin extends AnimalEntity {
     private void addPlayerTarget(CallbackInfo ci) {
         this.targetSelector.add(7, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, false, false, player -> {
             // ensure foxes can attack players with an identity similar to their normal prey
-            if(!Identity.CONFIG.foxesAttackIdentityPrey) {
+            if(!IdentityConfig.foxesAttackIdentityPrey) {
                 return false;
             }
 

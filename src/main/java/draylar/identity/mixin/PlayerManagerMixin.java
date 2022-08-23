@@ -2,9 +2,10 @@ package draylar.identity.mixin;
 
 import draylar.identity.Identity;
 import draylar.identity.api.event.PlayerJoinCallback;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.impl.DimensionsRefresher;
 import draylar.identity.registry.Components;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.network.ClientConnection;
@@ -40,10 +41,10 @@ public class PlayerManagerMixin {
         ((DimensionsRefresher) player).identity_refreshDimensions();
 
         // Re-sync max health for identity
-        if (identity != null && Identity.CONFIG.scalingHealth) {
+        if (identity != null && IdentityConfig.scalingHealth) {
             player.setHealth(Math.min(player.getHealth(), identity.getMaxHealth()));
-            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(Identity.CONFIG.maxHealth, identity.getMaxHealth()));
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new EntityAttributesS2CPacket(player.getId(), player.getAttributes().getAttributesToSend()));
+            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(IdentityConfig.maxHealth, identity.getMaxHealth()));
+            ServerPlayNetworking.getSender(player).sendPacket(new EntityAttributesS2CPacket(player.getId(), player.getAttributes().getAttributesToSend()));
         }
     }
 }

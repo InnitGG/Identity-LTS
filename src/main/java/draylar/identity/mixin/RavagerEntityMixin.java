@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(RavagerEntity.class)
 public abstract class RavagerEntityMixin extends LivingEntity {
 
-    @Shadow
-    public abstract boolean canBeControlledByRider();
-
     private RavagerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -26,7 +23,7 @@ public abstract class RavagerEntityMixin extends LivingEntity {
         if (this.isAlive()) {
 
             // Ensure Ravager has a passenger
-            if (this.hasPassengers() && this.canBeControlledByRider()) {
+            if (this.hasPassengers()) { // && this.canBeControlledByRider()) { TODO: Check if this is needed.
                 LivingEntity rider = (LivingEntity) this.getPrimaryPassenger();
 
                 // Only players should be able to control Ravager

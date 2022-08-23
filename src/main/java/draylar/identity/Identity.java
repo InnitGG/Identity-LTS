@@ -7,7 +7,6 @@ import draylar.identity.registry.Commands;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
 import draylar.identity.registry.EventHandlers;
-import draylar.omegaconfig.OmegaConfig;
 import io.github.ladysnake.pal.AbilitySource;
 import io.github.ladysnake.pal.Pal;
 import net.fabricmc.api.ModInitializer;
@@ -24,8 +23,6 @@ import net.minecraft.util.registry.Registry;
 import java.util.List;
 
 public class Identity implements ModInitializer {
-
-    public static final IdentityConfig CONFIG = OmegaConfig.register(IdentityConfig.class);
     public static final AbilitySource ABILITY_SOURCE = Pal.getAbilitySource(id("equipped_identity"));
 
     @Override
@@ -44,8 +41,8 @@ public class Identity implements ModInitializer {
     public static boolean hasFlyingPermissions(ServerPlayerEntity player) {
         LivingEntity identity = Components.CURRENT_IDENTITY.get(player).getIdentity();
 
-        if(identity != null && Identity.CONFIG.enableFlight && identity.getType().isIn(EntityTags.FLYING)) {
-            List<String> requiredAdvancements = CONFIG.advancementsRequiredForFlight;
+        if(identity != null && IdentityConfig.enableFlight && identity.getType().isIn(EntityTags.FLYING)) {
+            List<String> requiredAdvancements = IdentityConfig.advancementsRequiredForFlight;
 
             // requires at least 1 advancement, check if player has them
             if (!requiredAdvancements.isEmpty()) {
@@ -76,6 +73,6 @@ public class Identity implements ModInitializer {
 
     public static int getCooldown(EntityType<?> type) {
         String id = Registry.ENTITY_TYPE.getId(type).toString();
-        return CONFIG.abilityCooldownMap.getOrDefault(id, 20);
+        return IdentityConfig.abilityCooldownMap.getOrDefault(id, 20);
     }
 }

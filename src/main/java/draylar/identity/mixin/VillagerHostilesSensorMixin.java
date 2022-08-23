@@ -2,6 +2,7 @@ package draylar.identity.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +28,7 @@ public class VillagerHostilesSensorMixin {
     private void checkHostileIdentity(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         if(entity instanceof PlayerEntity) {
             // check if we should be performing this from config
-            if(Identity.CONFIG.villagersRunFromIdentities) {
+            if(IdentityConfig.villagersRunFromIdentities) {
                 LivingEntity identity = Components.CURRENT_IDENTITY.get(entity).getIdentity();
 
                 // check if identity is valid & if it is a type villagers run from

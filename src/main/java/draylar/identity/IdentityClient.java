@@ -4,6 +4,7 @@ import draylar.identity.ability.AbilityOverlayRenderer;
 import draylar.identity.ability.AbilityRegistry;
 import draylar.identity.api.model.EntityArms;
 import draylar.identity.api.model.EntityUpdaters;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.network.ClientNetworking;
 import draylar.identity.registry.Components;
 import draylar.identity.screen.IdentityScreen;
@@ -46,7 +47,7 @@ public class IdentityClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (client.player != null) {
                 if (MENU_KEY.wasPressed()) {
-                    if (Identity.CONFIG.enableClientSwapMenu || client.player.hasPermissionLevel(3)) {
+                    if (IdentityConfig.enableClientSwapMenu || client.player.hasPermissionLevel(3)) {
                         MinecraftClient.getInstance().setScreen(new IdentityScreen());
                     }
                 }

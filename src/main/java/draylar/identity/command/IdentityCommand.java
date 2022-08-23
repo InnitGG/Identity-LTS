@@ -4,8 +4,9 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import draylar.identity.Identity;
 import draylar.identity.cca.IdentityComponent;
 import draylar.identity.cca.UnlockedIdentitiesComponent;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.EntitySummonArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
@@ -15,14 +16,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class IdentityCommand {
 
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, b) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, b, c) -> {
             LiteralCommandNode<ServerCommandSource> rootNode = CommandManager
                     .literal("identity")
                     .requires(source -> source.hasPermissionLevel(2))
@@ -161,15 +162,15 @@ public class IdentityCommand {
         EntityType<?> type = Registry.ENTITY_TYPE.get(identity);
 
         if(current.getIdentity() != null && current.getIdentity().getType().equals(type)) {
-            if(Identity.CONFIG.logCommands) {
-                source.sendMessage(new TranslatableText("identity.test_positive", player.getDisplayName(), new TranslatableText(type.getTranslationKey())), true);
+            if(IdentityConfig.logCommands) {
+                source.sendMessage(Text.translatable("identity.test_positive", player.getDisplayName(), Text.translatable(type.getTranslationKey())), true);
             }
 
             return 1;
         }
 
-        if(Identity.CONFIG.logCommands) {
-            source.sendMessage(new TranslatableText("identity.test_failed", player.getDisplayName(), new TranslatableText(type.getTranslationKey())), true);
+        if(IdentityConfig.logCommands) {
+            source.sendMessage(Text.translatable("identity.test_failed", player.getDisplayName(), Text.translatable(type.getTranslationKey())), true);
         }
 
         return 0;
@@ -180,15 +181,15 @@ public class IdentityCommand {
         EntityType<?> type = Registry.ENTITY_TYPE.get(identity);
 
         if(current.getIdentity() != null && !current.getIdentity().getType().equals(type)) {
-            if(Identity.CONFIG.logCommands) {
-                source.sendMessage(new TranslatableText("identity.test_failed", player.getDisplayName(), new TranslatableText(type.getTranslationKey())), true);
+            if(IdentityConfig.logCommands) {
+                source.sendMessage(Text.translatable("identity.test_failed", player.getDisplayName(), Text.translatable(type.getTranslationKey())), true);
             }
 
             return 1;
         }
 
-        if(Identity.CONFIG.logCommands) {
-            source.sendMessage(new TranslatableText("identity.test_positive", player.getDisplayName(), new TranslatableText(type.getTranslationKey())), true);
+        if(IdentityConfig.logCommands) {
+            source.sendMessage(Text.translatable("identity.test_positive", player.getDisplayName(), Text.translatable(type.getTranslationKey())), true);
         }
 
         return 0;
@@ -201,13 +202,13 @@ public class IdentityCommand {
         if(!unlocked.has(entity)) {
             boolean result = unlocked.unlock(entity);
 
-            if(result && Identity.CONFIG.logCommands) {
-                player.sendMessage(new TranslatableText("identity.unlock_entity", new TranslatableText(entity.getTranslationKey())), true);
-                source.sendMessage(new TranslatableText("identity.grant_success", new TranslatableText(entity.getTranslationKey()), player.getDisplayName()), true);
+            if(result && IdentityConfig.logCommands) {
+                player.sendMessage(Text.translatable("identity.unlock_entity", Text.translatable(entity.getTranslationKey())), true);
+                source.sendMessage(Text.translatable("identity.grant_success", Text.translatable(entity.getTranslationKey()), player.getDisplayName()), true);
             }
         } else {
-            if(Identity.CONFIG.logCommands) {
-                source.sendMessage(new TranslatableText("identity.already_has", player.getDisplayName(), new TranslatableText(entity.getTranslationKey())), true);
+            if(IdentityConfig.logCommands) {
+                source.sendMessage(Text.translatable("identity.already_has", player.getDisplayName(), Text.translatable(entity.getTranslationKey())), true);
             }
         }
     }
@@ -219,13 +220,13 @@ public class IdentityCommand {
         if(unlocked.has(entity)) {
             unlocked.revoke(entity);
 
-            if(Identity.CONFIG.logCommands) {
-                player.sendMessage(new TranslatableText("identity.revoke_entity", new TranslatableText(entity.getTranslationKey())), true);
-                source.sendMessage(new TranslatableText("identity.revoke_success", new TranslatableText(entity.getTranslationKey()), player.getDisplayName()), true);
+            if(IdentityConfig.logCommands) {
+                player.sendMessage(Text.translatable("identity.revoke_entity", Text.translatable(entity.getTranslationKey())), true);
+                source.sendMessage(Text.translatable("identity.revoke_success", Text.translatable(entity.getTranslationKey()), player.getDisplayName()), true);
             }
         } else {
-            if(Identity.CONFIG.logCommands) {
-                source.sendMessage(new TranslatableText("identity.does_not_have", player.getDisplayName(), new TranslatableText(entity.getTranslationKey())), true);
+            if(IdentityConfig.logCommands) {
+                source.sendMessage(Text.translatable("identity.does_not_have", player.getDisplayName(), Text.translatable(entity.getTranslationKey())), true);
             }
         }
     }
@@ -239,8 +240,8 @@ public class IdentityCommand {
         if(createdEntity instanceof LivingEntity) {
             boolean result = current.setIdentity((LivingEntity) createdEntity);
 
-            if(result && Identity.CONFIG.logCommands) {
-                source.sendMessage(new TranslatableText("identity.equip_success", new TranslatableText(entity.getTranslationKey()), player.getDisplayName()), true);
+            if(result && IdentityConfig.logCommands) {
+                source.sendMessage(Text.translatable("identity.equip_success", Text.translatable(entity.getTranslationKey()), player.getDisplayName()), true);
             }
         }
     }
@@ -249,8 +250,8 @@ public class IdentityCommand {
         IdentityComponent current = Components.CURRENT_IDENTITY.get(player);
         boolean result = current.setIdentity(null);
 
-        if(result && Identity.CONFIG.logCommands) {
-            source.sendMessage(new TranslatableText("identity.unequip_success", player.getDisplayName()), false);
+        if(result && IdentityConfig.logCommands) {
+            source.sendMessage(Text.translatable("identity.unequip_success", player.getDisplayName()), false);
         }
     }
 }

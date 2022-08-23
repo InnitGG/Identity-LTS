@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.impl.NearbySongAccessor;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
@@ -168,7 +169,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     private void getHurtSound(DamageSource source, CallbackInfoReturnable<SoundEvent> cir) {
         LivingEntity identity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 
-        if (Identity.CONFIG.useIdentitySounds && identity != null) {
+        if (IdentityConfig.useIdentitySounds && identity != null) {
             cir.setReturnValue(((LivingEntityAccessor) identity).callGetHurtSound(source));
         }
     }
@@ -184,7 +185,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     private void tickAmbientSounds(CallbackInfo ci) {
         LivingEntity identity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 
-        if (!world.isClient && Identity.CONFIG.playAmbientSounds && identity instanceof MobEntity) {
+        if (!world.isClient && IdentityConfig.playAmbientSounds && identity instanceof MobEntity) {
             MobEntity mobIdentity = (MobEntity) identity;
 
             if (this.isAlive() && this.random.nextInt(1000) < this.identity_ambientSoundChance++) {
@@ -199,7 +200,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
 
                     // By default, players can not hear their own ambient noises.
                     // This is because ambient noises can be very annoying.
-                    if(Identity.CONFIG.hearSelfAmbient) {
+                    if(IdentityConfig.hearSelfAmbient) {
                         this.world.playSound(null, this.getX(), this.getY(), this.getZ(), sound, this.getSoundCategory(), volume, pitch);
                     } else {
                         this.world.playSound((PlayerEntity) (Object) this, this.getX(), this.getY(), this.getZ(), sound, this.getSoundCategory(), volume, pitch);
@@ -217,7 +218,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     private void getDeathSound(CallbackInfoReturnable<SoundEvent> cir) {
         LivingEntity identity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 
-        if (Identity.CONFIG.useIdentitySounds && identity != null) {
+        if (IdentityConfig.useIdentitySounds && identity != null) {
             cir.setReturnValue(((LivingEntityAccessor) identity).callGetDeathSound());
         }
     }
@@ -230,7 +231,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     private void getFallSounds(CallbackInfoReturnable<LivingEntity.FallSounds> cir) {
         LivingEntity identity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 
-        if (Identity.CONFIG.useIdentitySounds && identity != null) {
+        if (IdentityConfig.useIdentitySounds && identity != null) {
             cir.setReturnValue(identity.getFallSounds());
         }
     }

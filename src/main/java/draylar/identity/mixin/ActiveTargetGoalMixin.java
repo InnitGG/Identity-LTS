@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
@@ -28,7 +29,7 @@ public abstract class ActiveTargetGoalMixin extends TrackTargetGoalMixin {
             cancellable = true
     )
     private void ignoreMorphedPlayers(CallbackInfo ci) {
-        if (Identity.CONFIG.hostilesIgnoreHostileIdentityPlayer && this.mob instanceof Monster && this.targetEntity instanceof PlayerEntity) {
+        if (IdentityConfig.hostilesIgnoreHostileIdentityPlayer && this.mob instanceof Monster && this.targetEntity instanceof PlayerEntity) {
             PlayerEntity targetPlayer = (PlayerEntity) this.targetEntity;
             LivingEntity identity = Components.CURRENT_IDENTITY.get(targetPlayer).getIdentity();
 
@@ -62,7 +63,7 @@ public abstract class ActiveTargetGoalMixin extends TrackTargetGoalMixin {
     @Override
     protected void identity_shouldContinue(CallbackInfoReturnable<Boolean> cir) {
         // check cancelling for hostiles
-        if(Identity.CONFIG.hostilesIgnoreHostileIdentityPlayer && Identity.CONFIG.hostilesForgetNewHostileIdentityPlayer && this.mob instanceof Monster && this.targetEntity instanceof PlayerEntity) {
+        if(IdentityConfig.hostilesIgnoreHostileIdentityPlayer && IdentityConfig.hostilesForgetNewHostileIdentityPlayer && this.mob instanceof Monster && this.targetEntity instanceof PlayerEntity) {
             PlayerEntity targetPlayer = (PlayerEntity) this.targetEntity;
             LivingEntity identity = Components.CURRENT_IDENTITY.get(targetPlayer).getIdentity();
 

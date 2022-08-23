@@ -4,6 +4,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import draylar.identity.Identity;
 import draylar.identity.api.event.IdentitySwapCallback;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.impl.DimensionsRefresher;
 import draylar.identity.mixin.EntityAccessor;
 import draylar.identity.mixin.LivingEntityAccessor;
@@ -73,9 +74,9 @@ public class IdentityComponent implements AutoSyncedComponent, ServerTickingComp
         ((DimensionsRefresher) player).identity_refreshDimensions();
 
         // Identity is valid and scaling health is on; set entity's max health and current health to reflect identity.
-        if (identity != null && Identity.CONFIG.scalingHealth) {
+        if (identity != null && IdentityConfig.scalingHealth) {
             player.setHealth(Math.min(player.getHealth(), identity.getMaxHealth()));
-            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(Identity.CONFIG.maxHealth, identity.getMaxHealth()));
+            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(Math.min(IdentityConfig.maxHealth, identity.getMaxHealth()));
         }
 
         // If the identity is null (going back to player), set the player's base health value to 20 (default) to clear old changes.
@@ -86,7 +87,7 @@ public class IdentityComponent implements AutoSyncedComponent, ServerTickingComp
         // update flight properties on player depending on identity
         if (Identity.hasFlyingPermissions((ServerPlayerEntity) player)) {
             Identity.ABILITY_SOURCE.grantTo(player, VanillaAbilities.ALLOW_FLYING);
-            player.getAbilities().flySpeed = Identity.CONFIG.flySpeed;
+            player.getAbilities().flySpeed = IdentityConfig.flySpeed;
             player.sendAbilitiesUpdate();
         } else {
             Identity.ABILITY_SOURCE.revokeFrom(player, VanillaAbilities.ALLOW_FLYING);

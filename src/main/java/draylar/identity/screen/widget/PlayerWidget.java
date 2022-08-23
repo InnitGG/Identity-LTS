@@ -5,15 +5,14 @@ import draylar.identity.Identity;
 import draylar.identity.network.ClientNetworking;
 import draylar.identity.screen.IdentityScreen;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.minecraft.client.MinecraftClient;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
 public class PlayerWidget extends PressableWidget {
@@ -21,7 +20,7 @@ public class PlayerWidget extends PressableWidget {
     private final IdentityScreen parent;
 
     public PlayerWidget(float x, float y, float width, float height, IdentityScreen parent) {
-        super((int) x, (int) y, (int) width, (int) height, new LiteralText("")); // int x, int y, int width, int height, message
+        super((int) x, (int) y, (int) width, (int) height, Text.empty()); // int x, int y, int width, int height, message
         this.parent = parent;
     }
 
@@ -52,7 +51,7 @@ public class PlayerWidget extends PressableWidget {
     public void onPress() {
         PacketByteBuf packet = new PacketByteBuf(Unpooled.buffer());
         packet.writeIdentifier(Registry.ENTITY_TYPE.getId(EntityType.PLAYER));
-        ClientSidePacketRegistry.INSTANCE.sendToServer(ClientNetworking.IDENTITY_REQUEST, packet);
+        ClientPlayNetworking.send(ClientNetworking.IDENTITY_REQUEST, packet);
         parent.disableAll();
     }
 

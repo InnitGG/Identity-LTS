@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import io.github.ladysnake.pal.VanillaAbilities;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.PlayerAdvancementTracker;
@@ -23,7 +24,7 @@ public class PlayerAdvancementTrackerMixin {
     private void refreshFlight(Advancement advancement, String criterionName, CallbackInfoReturnable<Boolean> cir) {
         if(Identity.hasFlyingPermissions(owner)) {
             Identity.ABILITY_SOURCE.grantTo(owner, VanillaAbilities.ALLOW_FLYING);
-            owner.getAbilities().flySpeed = Identity.CONFIG.flySpeed;
+            owner.getAbilities().flySpeed = IdentityConfig.flySpeed;
             owner.sendAbilitiesUpdate();
         }
     }

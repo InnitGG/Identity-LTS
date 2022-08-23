@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import io.github.ladysnake.pal.VanillaAbilities;
 import net.minecraft.entity.EntityType;
@@ -8,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +29,7 @@ public abstract class ServerPlayerEntityMixin {
             at = @At("HEAD")
     )
     private void revokeIdentityOnDeath(DamageSource source, CallbackInfo ci) {
-        if(Identity.CONFIG.revokeIdentityOnDeath && !this.isCreative() && !this.isSpectator()) {
+        if(IdentityConfig.revokeIdentityOnDeath && !this.isCreative() && !this.isSpectator()) {
             LivingEntity entity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 
             // revoke the identity current equipped by the player
@@ -40,11 +40,11 @@ public abstract class ServerPlayerEntityMixin {
 
                 // todo: this option might be server-only given that this method isn't[?] called on the client
                 // send revoke message to player if they aren't in creative and the config option is on
-                if(Identity.CONFIG.overlayIdentityRevokes) {
+                if(IdentityConfig.overlayIdentityRevokes) {
                     sendMessage(
-                            new TranslatableText(
+                            Text.translatable(
                                     "identity.revoke_entity",
-                                    new TranslatableText(IdentityType.getTranslationKey()).asString()
+                                    Text.translatable(IdentityType.getTranslationKey()).getString()
                             ), true
                     );
                 }
@@ -60,7 +60,7 @@ public abstract class ServerPlayerEntityMixin {
         if(Identity.hasFlyingPermissions((ServerPlayerEntity) (Object) this)) {
             if(!Identity.ABILITY_SOURCE.grants((ServerPlayerEntity) (Object) this, VanillaAbilities.ALLOW_FLYING)) {
                 Identity.ABILITY_SOURCE.grantTo((ServerPlayerEntity) (Object) this, VanillaAbilities.ALLOW_FLYING);
-                ((ServerPlayerEntity) (Object) this).getAbilities().flySpeed = Identity.CONFIG.flySpeed;
+                ((ServerPlayerEntity) (Object) this).getAbilities().flySpeed = IdentityConfig.flySpeed;
                 ((ServerPlayerEntity) (Object) this).sendAbilitiesUpdate();
             }
 

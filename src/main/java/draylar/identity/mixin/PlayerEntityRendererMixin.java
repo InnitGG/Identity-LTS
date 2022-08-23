@@ -3,6 +3,7 @@ package draylar.identity.mixin;
 import draylar.identity.Identity;
 import draylar.identity.IdentityClient;
 import draylar.identity.api.model.*;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -86,13 +87,13 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             }
 
             // equip held items on identity
-            if(Identity.CONFIG.identitiesEquipItems) {
+            if(IdentityConfig.identitiesEquipItems) {
                 identity.equipStack(EquipmentSlot.MAINHAND, player.getEquippedStack(EquipmentSlot.MAINHAND));
                 identity.equipStack(EquipmentSlot.OFFHAND, player.getEquippedStack(EquipmentSlot.OFFHAND));
             }
 
             // equip armor items on identity
-            if(Identity.CONFIG.identitiesEquipArmor) {
+            if(IdentityConfig.identitiesEquipArmor) {
                 identity.equipStack(EquipmentSlot.HEAD, player.getEquippedStack(EquipmentSlot.HEAD));
                 identity.equipStack(EquipmentSlot.CHEST, player.getEquippedStack(EquipmentSlot.CHEST));
                 identity.equipStack(EquipmentSlot.LEGS, player.getEquippedStack(EquipmentSlot.LEGS));
@@ -130,7 +131,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             identityRenderer.render(identity, f, g, matrixStack, vertexConsumerProvider, i);
 
             // Only render nametags if the server option is true and the entity being rendered is NOT this player/client
-            if(Identity.CONFIG.showPlayerNametag && player != MinecraftClient.getInstance().player) {
+            if(IdentityConfig.showPlayerNametag && player != MinecraftClient.getInstance().player) {
                 renderLabelIfPresent((AbstractClientPlayerEntity) player, player.getDisplayName(), matrixStack, vertexConsumerProvider, i);
             }
         } else {

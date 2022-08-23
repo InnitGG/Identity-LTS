@@ -1,6 +1,7 @@
 package draylar.identity.mixin;
 
 import draylar.identity.Identity;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
 import net.minecraft.entity.EntityType;
@@ -29,7 +30,7 @@ public abstract class WolfEntityMixin extends TameableEntity {
     private void addPlayerTarget(CallbackInfo ci) {
         this.targetSelector.add(7, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, false, false, player -> {
             // ensure wolves can attack players with an identity similar to their normal prey
-            if(!Identity.CONFIG.wolvesAttackIdentityPrey) {
+            if(!IdentityConfig.wolvesAttackIdentityPrey) {
                 return false;
             }
 
@@ -38,7 +39,7 @@ public abstract class WolfEntityMixin extends TameableEntity {
             // wolves should ignore players that look like their prey if they have an owner,
             // unless the config option is turned to true
             LivingEntity owner = this.getOwner();
-            if(owner != null || Identity.CONFIG.ownedWolvesAttackIdentityPrey) {
+            if(owner != null || IdentityConfig.ownedWolvesAttackIdentityPrey) {
                 return false;
             }
 

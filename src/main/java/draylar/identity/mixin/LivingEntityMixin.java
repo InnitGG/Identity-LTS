@@ -2,6 +2,7 @@ package draylar.identity.mixin;
 
 import draylar.identity.Identity;
 import draylar.identity.api.IdentityGranting;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.impl.NearbySongAccessor;
 import draylar.identity.registry.Components;
 import draylar.identity.registry.EntityTags;
@@ -180,7 +181,7 @@ public abstract class LivingEntityMixin extends Entity implements NearbySongAcce
             cancellable = true
     )
     private void modifyMaxHealth(CallbackInfoReturnable<Float> cir) {
-        if (Identity.CONFIG.scalingHealth) {
+        if (IdentityConfig.scalingHealth) {
             if ((Object) this instanceof PlayerEntity) {
                 LivingEntity identity = Components.CURRENT_IDENTITY.get(this).getIdentity();
 

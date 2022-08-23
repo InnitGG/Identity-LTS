@@ -2,6 +2,7 @@ package draylar.identity.api;
 
 import draylar.identity.Identity;
 import draylar.identity.cca.UnlockedIdentitiesComponent;
+import draylar.identity.config.IdentityConfig;
 import draylar.identity.registry.Components;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
 public class IdentityGranting {
@@ -19,13 +20,13 @@ public class IdentityGranting {
             int amountKilled = serverPlayerEntity.getStatHandler().getStat(Stats.KILLED, granted);
 
             // If the player has to kill a certain number of mobs before unlocking an Identity, check their statistic for the specific type.
-            if(Identity.CONFIG.killForIdentity) {
+            if(IdentityConfig.killForIdentity) {
                 String id = Registry.ENTITY_TYPE.getId(granted).toString();
 
                 // Check against a specific count requirement or the default count.
-                int required = Identity.CONFIG.requiredKillsForIdentity;
-                if(Identity.CONFIG.requiredKillsByType != null && Identity.CONFIG.requiredKillsByType.containsKey(id)) {
-                    required = Identity.CONFIG.requiredKillsByType.get(id);
+                int required = IdentityConfig.requiredKillsForIdentity;
+                if(IdentityConfig.requiredKillsByType != null && IdentityConfig.requiredKillsByType.containsKey(id)) {
+                    required = IdentityConfig.requiredKillsByType.get(id);
                 }
 
                 // If the amount currently killed is less than the required amount, do not allow the player to unlock.
@@ -43,11 +44,11 @@ public class IdentityGranting {
             if(result && !hadPreviously) {
 
                 // send unlock message to player if they aren't in creative and the config option is on
-                if(Identity.CONFIG.overlayIdentityUnlocks && !player.isCreative()) {
+                if(IdentityConfig.overlayIdentityUnlocks && !player.isCreative()) {
                     player.sendMessage(
-                            new TranslatableText(
+                            Text.translatable(
                                     "identity.unlock_entity",
-                                    new TranslatableText(granted.getTranslationKey())
+                                    Text.translatable(granted.getTranslationKey())
                             ), true
                     );
                 }
@@ -58,9 +59,9 @@ public class IdentityGranting {
             // force-morph player into new type
             Entity instanced = granted.create(player.world);
             if(instanced instanceof LivingEntity) {
-                if(Identity.CONFIG.forceChangeNew && isNew) {
+                if(IdentityConfig.forceChangeNew && isNew) {
                     Components.CURRENT_IDENTITY.get(player).setIdentity((LivingEntity) instanced);
-                } else if(Identity.CONFIG.forceChangeAlways) {
+                } else if(IdentityConfig.forceChangeAlways) {
                     Components.CURRENT_IDENTITY.get(player).setIdentity((LivingEntity) instanced);
                 }
             }
